@@ -1,0 +1,14 @@
+services:
+  rest-server:
+    container_name: ${REST_SERVER_CONTAINER_NAME}
+    image: restic/rest-server:${REST_SERVER_IMAGE_TAG}
+    restart: unless-stopped
+    ports:
+      - "${REST_SERVER_BIND_ADDRESS}:${REST_SERVER_PUBLISHED_PORT}:8000"
+    environment:
+      PASSWORD_FILE: ${REST_SERVER_PASSWORD_FILE}
+      OPTIONS: ${REST_SERVER_OPTIONS}
+    volumes:
+      - type: bind
+        source: ${REST_SERVER_DATA_ROOT}
+        target: /data
