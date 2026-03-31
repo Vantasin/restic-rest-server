@@ -10,6 +10,12 @@
 - `verify_repo.sh`: repo-wide local checks
 - `AGENTS.md`: thin router into `agents/`
 
+## Default Deployment Layout
+
+- repo clone path in examples: `/tank/docker/compose/restic-rest-server`
+- persistent data path in examples: `/tank/docker/data/restic-rest-server`
+- these are current tracked defaults, not universal hard requirements
+
 ## Human Docs
 
 - `Docs/README.md`: doc map

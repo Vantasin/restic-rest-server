@@ -10,6 +10,8 @@ the repo root.
 - published port: `${REST_SERVER_BIND_ADDRESS}:${REST_SERVER_PUBLISHED_PORT}:8000`
 - auth file path: `${REST_SERVER_PASSWORD_FILE}`
 - extra rest-server flags: `${REST_SERVER_OPTIONS}`
+- default tracked data path: `/tank/docker/data/restic-rest-server`
+- default human-doc examples assume a ZFS-backed host with pool `tank`
 
 ## Design Intent
 
@@ -25,3 +27,4 @@ the repo root.
 - changing the bind address or published port without updating security docs
 - switching away from bind-mounted persistent storage without updating storage
   guidance
+- ZFS/pool/path examples drifting away from the tracked defaults in the repo
