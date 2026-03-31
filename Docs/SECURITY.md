@@ -12,14 +12,16 @@ The default stack:
 - stores auth users in `.htpasswd`
 - enables `--append-only`
 - enables `--private-repos`
+- joins the shared `npm_proxy` external Docker network
 - does not configure built-in TLS inside the base Compose stack
 
-This means the safe default deployment shapes are:
+This means the safe default deployment shape is:
 
-- behind a reverse proxy that terminates HTTPS and forwards to
-  `127.0.0.1:8000`
-- on a trusted private network or VPN where plain HTTP exposure is an accepted
-  risk
+- behind a same-host Nginx Proxy Manager reverse proxy that terminates HTTPS
+  and forwards to `restic-rest-server:8000` on the shared Docker network
+
+Direct HTTP use on a trusted private network or VPN is still possible, but it
+is no longer the primary documented path in this repo.
 
 Direct unauthenticated exposure is out of scope for this repo.
 
@@ -54,12 +56,17 @@ repository password. They solve different problems.
 
 ## Reverse Proxy Guidance
 
-If you place the service behind a reverse proxy:
+For the default Nginx Proxy Manager deployment model:
 
 - keep `REST_SERVER_BIND_ADDRESS=127.0.0.1`
-- terminate HTTPS at the proxy
+- keep `REST_SERVER_PROXY_NETWORK=npm_proxy`
+- terminate HTTPS at Nginx Proxy Manager
+- in Nginx Proxy Manager, forward to `restic-rest-server` on port `8000`
 - forward only the intended hostname/path
 - preserve access logs at the proxy and container layers as needed
+
+Reference stack:
+<https://github.com/Vantasin/Nginx-Proxy-Manager.git>
 
 If you later choose built-in rest-server TLS instead, document the certificate
 mounts and option changes in the human docs at the same time.

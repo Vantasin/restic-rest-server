@@ -15,6 +15,11 @@ This repo is designed for the simplest server workflow:
 - Docker Compose V2
 - Git
 - optional but assumed in the default examples: ZFS on Linux with pool `tank`
+- Nginx Proxy Manager or another reverse proxy if the service will be exposed
+  over HTTPS
+
+Reference stack for the default reverse-proxy model:
+<https://github.com/Vantasin/Nginx-Proxy-Manager.git>
 
 ## First Deployment
 
@@ -39,10 +44,19 @@ chmod 600 .env
 
 Edit `.env` and set:
 
+- `REST_SERVER_PROXY_NETWORK`
 - `REST_SERVER_BIND_ADDRESS`
 - `REST_SERVER_PUBLISHED_PORT`
 - `REST_SERVER_DATA_ROOT`
 - `REST_SERVER_OPTIONS`
+
+Ensure the shared proxy network exists:
+
+If your Nginx Proxy Manager stack is already deployed, it should already exist.
+
+```bash
+docker network inspect npm_proxy >/dev/null 2>&1 || docker network create npm_proxy
+```
 
 Create the host storage path:
 
@@ -58,6 +72,17 @@ Start the service:
 ```bash
 docker compose up -d
 ```
+
+Configure Nginx Proxy Manager:
+
+If you are following the matching public Nginx Proxy Manager repo, use:
+<https://github.com/Vantasin/Nginx-Proxy-Manager.git>
+
+- Domain Name: your public backup hostname such as `backup.example.com`
+- Scheme: `http`
+- Forward Hostname / IP: `restic-rest-server`
+- Forward Port: `8000`
+- SSL: choose the certificate for the hostname and enable `Force SSL`
 
 Create the first HTTP auth user:
 

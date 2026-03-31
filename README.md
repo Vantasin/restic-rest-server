@@ -8,6 +8,11 @@ The default examples in this repo assume a ZFS-backed Linux server with pool
 `tank`, Compose clones under `/tank/docker/compose`, and persistent service
 data under `/tank/docker/data`.
 
+The default network model assumes a separate Nginx Proxy Manager stack handles
+public HTTPS and SSL termination on a shared external Docker network.
+Reference stack:
+<https://github.com/Vantasin/Nginx-Proxy-Manager.git>
+
 ## Quick Start
 
 1. Clone the repo onto the Linux host.
@@ -31,12 +36,22 @@ data under `/tank/docker/data`.
 
    At minimum, review:
 
+   - `REST_SERVER_PROXY_NETWORK`
    - `REST_SERVER_BIND_ADDRESS`
    - `REST_SERVER_PUBLISHED_PORT`
    - `REST_SERVER_DATA_ROOT`
    - `REST_SERVER_OPTIONS`
 
-4. Create the host storage path from `.env`.
+4. Ensure the shared proxy network exists.
+
+   If your Nginx Proxy Manager stack is already deployed, this should already
+   exist.
+
+   ```bash
+   docker network inspect npm_proxy >/dev/null 2>&1 || docker network create npm_proxy
+   ```
+
+5. Create the host storage path from `.env`.
 
    The example below uses the default `REST_SERVER_DATA_ROOT`.
 
@@ -45,19 +60,32 @@ data under `/tank/docker/data`.
    sudo chmod 700 /tank/docker/data/restic-rest-server
    ```
 
-5. Start the stack.
+6. Start the stack.
 
    ```bash
    docker compose up -d
    ```
 
-6. Create the first HTTP auth user inside the running container.
+7. Add the proxy host in Nginx Proxy Manager.
+
+   If you use the matching public Nginx Proxy Manager stack, see:
+   <https://github.com/Vantasin/Nginx-Proxy-Manager.git>
+
+   Use:
+
+   - Domain Name: your backup hostname such as `backup.example.com`
+   - Scheme: `http`
+   - Forward Hostname / IP: `restic-rest-server`
+   - Forward Port: `8000`
+   - SSL: your certificate with `Force SSL` enabled
+
+8. Create the first HTTP auth user inside the running container.
 
    ```bash
    docker compose exec rest-server create_user backup
    ```
 
-7. Initialize the first repository from a restic client.
+9. Initialize the first repository from a restic client.
 
    With the default `--private-repos` option, the repository path must start
    with the username. The example assumes HTTPS is terminated by a reverse
@@ -74,6 +102,7 @@ data under `/tank/docker/data`.
 
 - Uses the official `restic/rest-server` image pinned through `env.example`
 - Keeps authentication enabled by default
+- Joins the shared `npm_proxy` Docker network for reverse-proxy access
 - Stores persistent data on a host path bind mount, not inside the repo
 - Starts in `--append-only --private-repos` mode by default
 - Keeps `.env` local and gitignored; `env.example` is the tracked source of
@@ -141,7 +170,11 @@ Use the root README for the first deployment, then follow the detailed docs in
 - Docker Compose V2 is assumed.
 - The default examples assume your ZFS pool is named `tank`; replace `tank` if
   the host uses a different pool name.
-- The default bind address should stay `127.0.0.1` when a reverse proxy is
-  terminating TLS on the same host.
+- The default reverse proxy assumption is a separate Nginx Proxy Manager stack
+  on the shared `npm_proxy` Docker network.
+- The matching public Nginx Proxy Manager reference repo is:
+  <https://github.com/Vantasin/Nginx-Proxy-Manager.git>
+- The default bind address stays `127.0.0.1`; Nginx Proxy Manager should proxy
+  to `restic-rest-server:8000` over Docker networking, not via the host port.
 - Exposing the service directly on an untrusted network without TLS is not a
   safe default; see [`Docs/SECURITY.md`](./Docs/SECURITY.md).

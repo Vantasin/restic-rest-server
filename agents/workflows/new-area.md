@@ -2,7 +2,8 @@
 
 Use this workflow when adding a new major repo area or component, such as:
 
-- reverse proxy guidance
+- an alternative reverse proxy model beyond the current Nginx Proxy Manager
+  default
 - built-in TLS support documentation
 - alternative storage layouts
 - additional maintenance or observability workflows

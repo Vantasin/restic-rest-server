@@ -21,12 +21,25 @@ REST_SERVER_IMAGE_TAG=0.14.0
 
 ### `REST_SERVER_CONTAINER_NAME`
 
-Stable container name used for operator commands such as user management.
+Stable container name used for operator commands such as user management. With
+the default reverse-proxy model, this is also the hostname Nginx Proxy Manager
+should forward to on the shared Docker network.
 
 Default:
 
 ```dotenv
 REST_SERVER_CONTAINER_NAME=restic-rest-server
+```
+
+### `REST_SERVER_PROXY_NETWORK`
+
+Name of the shared external Docker network used by Nginx Proxy Manager and this
+stack.
+
+Default:
+
+```dotenv
+REST_SERVER_PROXY_NETWORK=npm_proxy
 ```
 
 ### `REST_SERVER_BIND_ADDRESS`
@@ -35,12 +48,15 @@ Host IP for the published port.
 
 Recommended values:
 
-- `127.0.0.1` when using a same-host reverse proxy for TLS
+- `127.0.0.1` when using same-host Nginx Proxy Manager for TLS; the proxy
+  should reach the container over `REST_SERVER_PROXY_NETWORK`
 - `0.0.0.0` only when you intentionally want direct network exposure
 
 ### `REST_SERVER_PUBLISHED_PORT`
 
-Host port mapped to container port `8000`.
+Host port mapped to container port `8000`. This is mainly for host-local
+checks, troubleshooting, or intentional direct access. It is not the default
+public HTTPS entry point.
 
 ### `REST_SERVER_DATA_ROOT`
 
@@ -90,7 +106,7 @@ Keep this value as one quoted string in `.env`.
 ## What Is Intentionally Not In `.env`
 
 - repository passwords used by restic clients
-- reverse proxy configuration
+- full Nginx Proxy Manager stack configuration
 - TLS certificate management
 - host firewall rules
 

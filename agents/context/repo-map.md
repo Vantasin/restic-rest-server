@@ -14,6 +14,9 @@
 
 - repo clone path in examples: `/tank/docker/compose/restic-rest-server`
 - persistent data path in examples: `/tank/docker/data/restic-rest-server`
+- shared reverse-proxy network in examples: `npm_proxy`
+- default public HTTPS path: external Nginx Proxy Manager forwarding to
+  `restic-rest-server:8000`
 - these are current tracked defaults, not universal hard requirements
 
 ## Human Docs

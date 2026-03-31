@@ -4,7 +4,8 @@ The repo is intentionally prepared for growth, but growth should stay orderly.
 
 ## Likely Next Areas
 
-- reverse proxy guidance
+- alternative reverse proxy guidance beyond the current Nginx Proxy Manager
+  default
 - built-in TLS support with certificate mounts
 - storage migrations or dataset-specific examples
 - observability or metrics guidance

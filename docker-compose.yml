@@ -12,3 +12,10 @@ services:
       - type: bind
         source: ${REST_SERVER_DATA_ROOT}
         target: /data
+    networks:
+      - npm_proxy
+
+networks:
+  npm_proxy:
+    external: true
+    name: ${REST_SERVER_PROXY_NETWORK}

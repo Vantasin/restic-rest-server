@@ -12,7 +12,8 @@ This repo is for server-side Restic REST deployment only.
 
 ## Allowed Growth
 
-- reverse proxy guidance
+- reverse proxy guidance and documented integration with the external Nginx
+  Proxy Manager stack
 - TLS and certificate-mount guidance
 - storage-layout guidance
 - additional server-side maintenance workflows
@@ -23,3 +24,5 @@ This repo is for server-side Restic REST deployment only.
   repo and update the source-of-truth matrix
 - if a concern can stay external to the base stack, prefer documenting the
   integration instead of hard-wiring it into `docker-compose.yml`
+- joining the shared external proxy network is acceptable; vendoring the full
+  Nginx Proxy Manager stack into this repo is not
