@@ -4,13 +4,20 @@ Self-contained deployment repo for a server-side `restic/rest-server` stack.
 This repo is intentionally scoped to Docker Compose deployment and operation of
 the REST server. macOS client automation belongs elsewhere.
 
+The default examples in this repo assume a ZFS-backed Linux server with pool
+`tank`, Compose clones under `/tank/docker/compose`, and persistent service
+data under `/tank/docker/data`.
+
 ## Quick Start
 
 1. Clone the repo onto the Linux host.
 
    ```bash
-   git clone <REPO_URL> /srv/restic-rest-server-compose
-   cd /srv/restic-rest-server-compose
+   sudo zfs create -p tank/docker/compose/restic-rest-server
+   sudo zfs create -p tank/docker/data/restic-rest-server
+   sudo chown -R "$USER":"$USER" /tank/docker/compose/restic-rest-server
+   git clone <REPO_URL> /tank/docker/compose/restic-rest-server
+   cd /tank/docker/compose/restic-rest-server
    ```
 
 2. Copy the tracked env template to local runtime state.
@@ -34,8 +41,8 @@ the REST server. macOS client automation belongs elsewhere.
    The example below uses the default `REST_SERVER_DATA_ROOT`.
 
    ```bash
-   sudo mkdir -p /srv/restic-rest-server/repos
-   sudo chmod 700 /srv/restic-rest-server
+   sudo mkdir -p /tank/docker/data/restic-rest-server/repos
+   sudo chmod 700 /tank/docker/data/restic-rest-server
    ```
 
 5. Start the stack.
@@ -132,6 +139,8 @@ Use the root README for the first deployment, then follow the detailed docs in
 ## Repository Notes
 
 - Docker Compose V2 is assumed.
+- The default examples assume your ZFS pool is named `tank`; replace `tank` if
+  the host uses a different pool name.
 - The default bind address should stay `127.0.0.1` when a reverse proxy is
   terminating TLS on the same host.
 - Exposing the service directly on an untrusted network without TLS is not a

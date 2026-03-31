@@ -49,6 +49,12 @@ Host path bind-mounted to `/data` inside the container. This path persists:
 - `.htpasswd`
 - repository data under `repos/`
 
+Default:
+
+```dotenv
+REST_SERVER_DATA_ROOT=/tank/docker/data/restic-rest-server
+```
+
 See [`STORAGE.md`](./STORAGE.md).
 
 ### `REST_SERVER_PASSWORD_FILE`

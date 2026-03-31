@@ -8,11 +8,14 @@ volume.
 - `REST_SERVER_DATA_ROOT` on the host is mounted to `/data` in the container
 - `.htpasswd` lives under that path
 - repositories live under `/data/repos` by default
+- the default tracked path is `/tank/docker/data/restic-rest-server`
+- the default repo clone location is `/tank/docker/compose/restic-rest-server`
 
 ## Why This Matters
 
 - keeps storage placement explicit in `.env`
 - aligns with repo-root Docker deployment workflows used elsewhere
+- aligns with the live server's ZFS-backed `tank/docker/{compose,data}` layout
 - allows storage to move to separate filesystems or datasets later without
   changing the repo layout
 

@@ -3,6 +3,8 @@
 This repo intentionally uses a host path bind mount for persistent data instead
 of a Docker named volume.
 
+The default examples assume a ZFS-backed host with pool `tank`.
+
 ## Why A Host Path
 
 - matches the clone, edit, deploy workflow used in the rest of your Docker
@@ -19,7 +21,24 @@ of a Docker named volume.
 Recommended host layout:
 
 ```text
-/srv/restic-rest-server/
+/tank/docker/
+├── compose/
+│   └── restic-rest-server/   # Git repo clone
+└── data/
+    └── restic-rest-server/
+        ├── .htpasswd
+        └── repos/
+            ├── backup/
+            │   ├── laptop/
+            │   └── workstation/
+            └── server/
+                └── prod/
+```
+
+Equivalent service-data subtree:
+
+```text
+/tank/docker/data/restic-rest-server/
 ├── .htpasswd
 └── repos/
     ├── backup/
@@ -37,8 +56,9 @@ With the default `--private-repos` option, the first path segment under
 Recommended baseline:
 
 ```bash
-sudo mkdir -p /srv/restic-rest-server/repos
-sudo chmod 700 /srv/restic-rest-server
+sudo zfs create -p tank/docker/data/restic-rest-server
+sudo mkdir -p /tank/docker/data/restic-rest-server/repos
+sudo chmod 700 /tank/docker/data/restic-rest-server
 ```
 
 The bind-mounted path should live outside the Git repo. Do not store
@@ -47,7 +67,7 @@ repositories inside the clone.
 ## Capacity And Maintenance
 
 - monitor free space on the filesystem that backs `REST_SERVER_DATA_ROOT`
-- snapshot or back up the host storage layer separately if needed
+- snapshot or back up the ZFS dataset or host storage layer separately if needed
 - keep repository data and auth material on persistent storage before first
   production use
 

@@ -14,15 +14,21 @@ This repo is designed for the simplest server workflow:
 - Docker Engine
 - Docker Compose V2
 - Git
+- optional but assumed in the default examples: ZFS on Linux with pool `tank`
 
 ## First Deployment
 
-Clone the repo:
+Create the ZFS datasets and clone the repo:
 
 ```bash
-git clone <REPO_URL> /srv/restic-rest-server-compose
-cd /srv/restic-rest-server-compose
+sudo zfs create -p tank/docker/compose/restic-rest-server
+sudo zfs create -p tank/docker/data/restic-rest-server
+sudo chown -R "$USER":"$USER" /tank/docker/compose/restic-rest-server
+git clone <REPO_URL> /tank/docker/compose/restic-rest-server
+cd /tank/docker/compose/restic-rest-server
 ```
+
+If the host uses a different ZFS pool name, replace `tank` in the examples.
 
 Create local runtime config:
 
@@ -43,8 +49,8 @@ Create the host storage path:
 The example below uses the default `REST_SERVER_DATA_ROOT`.
 
 ```bash
-sudo mkdir -p /srv/restic-rest-server/repos
-sudo chmod 700 /srv/restic-rest-server
+sudo mkdir -p /tank/docker/data/restic-rest-server/repos
+sudo chmod 700 /tank/docker/data/restic-rest-server
 ```
 
 Start the service:
