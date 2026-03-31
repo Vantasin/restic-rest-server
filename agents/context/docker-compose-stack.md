@@ -8,7 +8,7 @@ the repo root.
 - image: `restic/rest-server:${REST_SERVER_IMAGE_TAG}`
 - bind mount: `${REST_SERVER_DATA_ROOT}:/data`
 - published port: `${REST_SERVER_BIND_ADDRESS}:${REST_SERVER_PUBLISHED_PORT}:8000`
-- shared external proxy network: `${REST_SERVER_PROXY_NETWORK}`
+- shared external proxy network: `npm_proxy`
 - auth file path: `${REST_SERVER_PASSWORD_FILE}`
 - extra rest-server flags: `${REST_SERVER_OPTIONS}`
 - default tracked data path: `/tank/docker/data/restic-rest-server`

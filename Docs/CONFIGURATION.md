@@ -31,17 +31,6 @@ Default:
 REST_SERVER_CONTAINER_NAME=restic-rest-server
 ```
 
-### `REST_SERVER_PROXY_NETWORK`
-
-Name of the shared external Docker network used by Nginx Proxy Manager and this
-stack.
-
-Default:
-
-```dotenv
-REST_SERVER_PROXY_NETWORK=npm_proxy
-```
-
 ### `REST_SERVER_BIND_ADDRESS`
 
 Host IP for the published port.
@@ -49,7 +38,7 @@ Host IP for the published port.
 Recommended values:
 
 - `127.0.0.1` when using same-host Nginx Proxy Manager for TLS; the proxy
-  should reach the container over `REST_SERVER_PROXY_NETWORK`
+  should reach the container over the shared `npm_proxy` network
 - `0.0.0.0` only when you intentionally want direct network exposure
 
 ### `REST_SERVER_PUBLISHED_PORT`

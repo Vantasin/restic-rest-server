@@ -18,4 +18,4 @@ services:
 networks:
   npm_proxy:
     external: true
-    name: ${REST_SERVER_PROXY_NETWORK}
+    name: npm_proxy

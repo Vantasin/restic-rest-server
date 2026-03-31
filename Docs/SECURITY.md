@@ -59,7 +59,6 @@ repository password. They solve different problems.
 For the default Nginx Proxy Manager deployment model:
 
 - keep `REST_SERVER_BIND_ADDRESS=127.0.0.1`
-- keep `REST_SERVER_PROXY_NETWORK=npm_proxy`
 - terminate HTTPS at Nginx Proxy Manager
 - in Nginx Proxy Manager, forward to `restic-rest-server` on port `8000`
 - forward only the intended hostname/path

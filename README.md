@@ -36,7 +36,6 @@ Reference stack:
 
    At minimum, review:
 
-   - `REST_SERVER_PROXY_NETWORK`
    - `REST_SERVER_BIND_ADDRESS`
    - `REST_SERVER_PUBLISHED_PORT`
    - `REST_SERVER_DATA_ROOT`

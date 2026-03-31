@@ -6,7 +6,7 @@ and what minimum verification should run.
 | Area | Implementation / Source Files | Canonical Human Docs | Agent Context / Rules | Minimum Verification |
 | --- | --- | --- | --- | --- |
 | Compose deployment stack | `docker-compose.yml` | `README.md`, `Docs/DEPLOYMENT.md`, `Docs/OPERATIONS.md`, `Docs/SECURITY.md` | `agents/context/docker-compose-stack.md`, `agents/context/rest-server.md`, `agents/rules/service-boundaries.md` | `make verify`, `docker compose --env-file env.example config` when available |
-| Tracked env contract | `env.example` | `Docs/CONFIGURATION.md`, `README.md`, `Docs/SECURITY.md` | `agents/context/source-of-truth-matrix.md`, `agents/rules/template-integrity.md` | `make verify` |
+| Tracked env contract | `env.example` | `Docs/CONFIGURATION.md`, `README.md` | `agents/context/source-of-truth-matrix.md`, `agents/rules/template-integrity.md` | `make verify` |
 | Storage model | `docker-compose.yml`, `env.example` | `Docs/STORAGE.md`, `Docs/DEPLOYMENT.md` | `agents/context/storage-and-volumes.md`, `agents/context/docker-compose-stack.md`, `agents/rules/service-boundaries.md` | `make verify` |
 | Security posture | `docker-compose.yml`, `env.example` | `Docs/SECURITY.md`, `README.md` | `agents/context/rest-server.md`, `agents/rules/service-boundaries.md` | `make verify`, repo review |
 | Verification and hooks | `verify_repo.sh`, `githooks/pre-commit`, `Makefile` | `Docs/OPERATIONS.md`, `githooks/README.md` | `agents/rules/verification.md`, `agents/workflows/repo-review.md` | `make verify`, `zsh -n verify_repo.sh`, `zsh -n githooks/pre-commit` |
