@@ -179,6 +179,8 @@ want to remove per-user path isolation.
 ## Default Behavior
 
 - Uses the official `restic/rest-server` image pinned through `env.example`
+- If you intentionally use Watchtower, setting local `.env` to
+  `REST_SERVER_IMAGE_TAG=latest` is acceptable
 - Keeps authentication enabled by default
 - Joins the shared `npm_proxy` Docker network for reverse-proxy access
 - Stores persistent data on a host path bind mount, not inside the repo

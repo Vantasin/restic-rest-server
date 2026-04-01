@@ -19,6 +19,18 @@ Default:
 REST_SERVER_IMAGE_TAG=0.14.0
 ```
 
+Recommended use:
+
+- keep the tracked default pinned in `env.example`
+- if you intentionally use Watchtower for unattended image updates, it is
+  reasonable to set local `.env` to `REST_SERVER_IMAGE_TAG=latest`
+
+Trade-off:
+
+- pinned tags keep repo state and runtime version aligned
+- `latest` fits auto-update workflows better but allows runtime drift ahead of
+  the repo
+
 ### `REST_SERVER_CONTAINER_NAME`
 
 Stable container name used for operator commands such as user management. With

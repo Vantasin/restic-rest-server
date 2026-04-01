@@ -17,6 +17,10 @@ Pull a newer image:
 docker compose pull
 ```
 
+If the deployment intentionally uses Watchtower, local `.env` may set
+`REST_SERVER_IMAGE_TAG=latest` instead of the pinned tracked default from
+`env.example`.
+
 Restart the service:
 
 ```bash
