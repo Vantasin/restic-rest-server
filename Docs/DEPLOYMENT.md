@@ -100,6 +100,69 @@ Create the first HTTP auth user:
 docker compose exec rest-server create_user backup
 ```
 
+## User And Client Onboarding
+
+The server auth layer and the restic repository password are different
+credentials.
+
+Server-managed credentials:
+
+- rest-server username
+- rest-server password stored in `.htpasswd`
+
+Client-managed credential:
+
+- restic repository password used to encrypt repository contents
+
+Typical onboarding flow:
+
+1. Optional but recommended for multi-user servers: create a per-user ZFS
+   dataset and quota before the first client write:
+
+   ```bash
+   sudo zfs create tank/docker/data/restic-rest-server/repos/backup
+   sudo zfs set quota=500G tank/docker/data/restic-rest-server/repos/backup
+   sudo chown root:root /tank/docker/data/restic-rest-server/repos/backup
+   sudo chmod 700 /tank/docker/data/restic-rest-server/repos/backup
+   ```
+
+   Keep the dataset name aligned with the username for the simple 1:1 model.
+   If you skip this, the user's repository path will be a normal directory
+   under `repos/`.
+
+2. Create the rest-server user:
+
+   ```bash
+   docker compose exec rest-server create_user backup
+   ```
+
+3. Give the client:
+
+   - the hostname, for example `backup.example.com`
+   - the rest-server username
+   - the rest-server password that was set during `create_user`
+
+4. Client initializes a repository under its own username prefix and chooses
+   its own restic repository password:
+
+   ```bash
+   restic -r "rest:https://backup:<SERVER_PASSWORD>@backup.example.com/backup/laptop" init
+   ```
+
+5. Client keeps managing its own restic repository password after that.
+
+To change a user's server password, rerun:
+
+```bash
+docker compose exec rest-server create_user backup
+```
+
+To delete a server user:
+
+```bash
+docker compose exec rest-server delete_user backup
+```
+
 ## Repository Initialization Expectations
 
 This repo deploys the server. Repository initialization still happens from a
@@ -114,6 +177,10 @@ restic -r "rest:https://backup:<PASSWORD>@backup.example.com/backup/laptop" init
 
 Additional repositories for the same user can be created beneath that prefix,
 for example `/backup/server-a` and `/backup/server-b`.
+
+If you use per-user ZFS datasets, create the dataset before the first client
+initializes the repository path so the repo lands in the dataset mountpoint
+instead of a plain directory.
 
 ## Update Workflow
 

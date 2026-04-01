@@ -79,6 +79,64 @@ Why:
 The bind-mounted path should live outside the Git repo. Do not store
 repositories inside the clone.
 
+## Quotas
+
+Recommended baseline:
+
+- set a ZFS quota on `tank/docker/data/restic-rest-server` so this service
+  cannot consume the entire pool
+- add per-user child datasets under `repos/` only if you want hard per-user
+  storage boundaries
+
+Example service-level quota:
+
+```bash
+sudo zfs set quota=2T tank/docker/data/restic-rest-server
+```
+
+### Optional Per-User Datasets
+
+With the default `--private-repos` option, authenticated user `alice` can only
+access `/alice` and below. That maps cleanly to a ZFS dataset mounted at:
+
+```text
+/tank/docker/data/restic-rest-server/repos/alice
+```
+
+Example:
+
+```bash
+sudo zfs create tank/docker/data/restic-rest-server/repos/alice
+sudo zfs set quota=500G tank/docker/data/restic-rest-server/repos/alice
+sudo chown root:root /tank/docker/data/restic-rest-server/repos/alice
+sudo chmod 700 /tank/docker/data/restic-rest-server/repos/alice
+docker compose exec rest-server create_user alice
+```
+
+Then the client can initialize repositories beneath that username prefix, for
+example:
+
+```bash
+restic -r "rest:https://alice:<SERVER_PASSWORD>@backup.example.com/alice/laptop" init
+```
+
+Guidelines:
+
+- create the dataset before the client writes to that path
+- keep the dataset name and username aligned for the simple 1:1 model
+- do not `mkdir` the same absolute per-user path first if it is meant to be a
+  dataset mountpoint
+- if you do not create a per-user dataset, restic will use a normal directory
+  under `repos/`
+
+### App-Level Limit Versus ZFS Quota
+
+`rest-server` also supports `--max-size` in `REST_SERVER_OPTIONS`. Upstream
+documents that flag as the maximum size of a repository in bytes.
+
+Use it when you want an application-level repository limit. Use ZFS quotas when
+you want a host-enforced filesystem boundary. They solve different problems.
+
 ## Capacity And Maintenance
 
 - monitor free space on the filesystem that backs `REST_SERVER_DATA_ROOT`

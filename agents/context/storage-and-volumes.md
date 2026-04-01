@@ -12,6 +12,10 @@ volume.
 - the default repo clone location is `/tank/docker/compose/restic-rest-server`
 - the default ownership split is operator-owned Compose repo path and
   `root:root` service-data path
+- optional per-user ZFS datasets can live under
+  `/tank/docker/data/restic-rest-server/repos/<username>`
+- app-layer `--max-size` limits and ZFS quotas are different controls and
+  should not be treated as interchangeable
 
 ## Why This Matters
 
@@ -26,3 +30,5 @@ volume.
 - do not move repository data into the Git repo
 - update `Docs/STORAGE.md` if paths or persistence semantics change
 - update `Docs/DEPLOYMENT.md` if first-start directory creation changes
+- keep quota guidance aligned between `Docs/STORAGE.md`,
+  `Docs/CONFIGURATION.md`, and `env.example`

@@ -76,6 +76,46 @@ Meaning:
 
 Keep this value as one quoted string in `.env`.
 
+Recommended mode choices:
+
+Append-only mode, recommended default:
+
+```dotenv
+REST_SERVER_OPTIONS="--path /data/repos --append-only --private-repos"
+```
+
+Client-managed maintenance mode:
+
+```dotenv
+REST_SERVER_OPTIONS="--path /data/repos --private-repos"
+```
+
+Trade-off:
+
+- append-only mode protects repository contents from normal client-side delete
+  and prune operations
+- client-managed maintenance mode allows each authenticated client to run its
+  own `forget` / `prune`
+
+In both modes, `--private-repos` keeps each user limited to its own repository
+path prefix.
+
+Optional app-level repository size limit:
+
+```dotenv
+REST_SERVER_OPTIONS="--path /data/repos --append-only --private-repos --max-size 500000000000"
+```
+
+Notes:
+
+- `--max-size` belongs inside `REST_SERVER_OPTIONS`; there is no separate env
+  variable for it in this repo
+- upstream documents `--max-size` as the maximum size of a repository in bytes
+- treat it as an application-level repository limit, not as a replacement for
+  ZFS dataset quotas
+- if you want hard host-side storage boundaries per user, document and enforce
+  them with ZFS datasets and quotas instead
+
 ## What Is Intentionally Not In `.env`
 
 - repository passwords used by restic clients

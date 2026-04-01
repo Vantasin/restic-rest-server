@@ -80,7 +80,25 @@ Delete a user:
 docker compose exec rest-server delete_user backup
 ```
 
+Reset or change a user's server password by running `create_user` again for the
+same username:
+
+```bash
+docker compose exec rest-server create_user backup
+```
+
 These commands update the `.htpasswd` file inside the bind-mounted data path.
+
+If you use per-user ZFS datasets and quotas, create the dataset before running
+the client's first `restic init` so the repository lands in the dataset
+mountpoint instead of a plain directory.
+
+Credential model:
+
+- rest-server username/password:
+  server-managed access credentials
+- restic repository password:
+  client-managed encryption password
 
 ## Backup Repository Initialization
 
@@ -92,6 +110,13 @@ Default pattern with `--private-repos`:
 ```bash
 restic -r "rest:https://backup:<PASSWORD>@backup.example.com/backup/laptop" init
 ```
+
+If the server is in append-only mode, clients can back up and restore through
+that endpoint but cannot run `forget` / `prune` there.
+
+If the server is in client-managed maintenance mode, clients can run
+`forget` / `prune` through the same endpoint. That changes the risk model for
+compromised clients, but it does not replace host-side quota planning.
 
 ## Repo Verification
 

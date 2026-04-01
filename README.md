@@ -102,6 +102,77 @@ Reference stack:
    restic -r "rest:https://backup:<PASSWORD>@backup.example.com/backup/laptop" init
    ```
 
+## Client Onboarding
+
+The server-side login and the restic repository password are separate.
+
+- Rest-server username/password:
+  server-managed access credentials stored in `.htpasswd`
+- Restic repository password:
+  client-managed encryption password known to the client
+
+Typical onboarding flow for one client:
+
+1. Server admin creates the rest-server user:
+
+   ```bash
+   docker compose exec rest-server create_user backup
+   ```
+
+2. Server admin gives the client:
+
+   - the hostname, for example `backup.example.com`
+   - the rest-server username, for example `backup`
+   - the rest-server password that was set during `create_user`
+
+3. Client initializes its repository and chooses its own restic repository
+   password:
+
+   ```bash
+   restic -r "rest:https://backup:<SERVER_PASSWORD>@backup.example.com/backup/laptop" init
+   ```
+
+4. Client reuses that repository URL for backup, snapshots, restore, and other
+   restic operations.
+
+Multiple users are supported. With `--private-repos`, each user is limited to
+paths under its own username prefix, for example:
+
+- `backup/laptop`
+- `backup/server-a`
+- `alice/workstation`
+
+## Access Modes
+
+The access model is controlled by `REST_SERVER_OPTIONS` in `.env`.
+
+Default append-only mode:
+
+```dotenv
+REST_SERVER_OPTIONS="--path /data/repos --append-only --private-repos"
+```
+
+Use this when:
+
+- clients should be able to back up and restore
+- clients should not be able to delete snapshots or prune repository data
+- the server should act as an append-only backup target
+
+Client-managed maintenance mode:
+
+```dotenv
+REST_SERVER_OPTIONS="--path /data/repos --private-repos"
+```
+
+Use this when:
+
+- each client should run its own `forget` / `prune`
+- each client is trusted to manage repository retention
+- you accept that a compromised client can delete its own snapshots and data
+
+`--private-repos` should stay enabled in both modes unless you intentionally
+want to remove per-user path isolation.
+
 ## Default Behavior
 
 - Uses the official `restic/rest-server` image pinned through `env.example`

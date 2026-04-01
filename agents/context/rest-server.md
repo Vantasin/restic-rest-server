@@ -10,6 +10,7 @@ This repo deploys the official `restic/rest-server` container image.
 - the default repo access model is `--append-only --private-repos`
 - the default public access path is through Nginx Proxy Manager on the shared
   `npm_proxy` network
+- rest-server access credentials and restic repository passwords are separate
 
 ## Operator Consequences
 
@@ -21,6 +22,8 @@ This repo deploys the official `restic/rest-server` container image.
 - host-local access is not part of the default stack; troubleshooting should
   assume Portainer logs, `docker compose logs`, or temporary in-container
   probes
+- changing `REST_SERVER_OPTIONS` changes whether clients are append-only backup
+  users or full self-maintaining repo users
 
 ## Where To Update Docs
 

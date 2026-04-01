@@ -33,6 +33,12 @@ REST server model:
 - `--append-only` helps limit damage from a compromised client
 - transport security is an explicit HTTP/TLS or reverse-proxy decision
 
+Credential split:
+
+- rest-server username/password controls access to the HTTP service
+- restic repository password encrypts the repository contents
+- the client can manage the repository password without the server knowing it
+
 SSH/SFTP model:
 
 - access control is typically tied to SSH keys, shell restrictions, and
@@ -65,6 +71,25 @@ Reference stack:
 
 If you later choose built-in rest-server TLS instead, document the certificate
 mounts and option changes in the human docs at the same time.
+
+## Append-Only Vs Client-Managed Maintenance
+
+Append-only mode:
+
+- `REST_SERVER_OPTIONS="--path /data/repos --append-only --private-repos"`
+- safer default for backup-only clients
+- clients cannot use that endpoint for `forget` / `prune`
+
+Client-managed maintenance mode:
+
+- `REST_SERVER_OPTIONS="--path /data/repos --private-repos"`
+- allows each authenticated client to run `forget` / `prune` against its own
+  repository path
+- increases the impact of a compromised client because that client can delete
+  its own repository data
+
+If you want per-user self-maintenance, client-managed maintenance mode is the
+cleaner fit. If you want server-side append-only protection, keep the default.
 
 ## Related Docs
 
