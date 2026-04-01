@@ -116,6 +116,45 @@ Notes:
 - if you want hard host-side storage boundaries per user, document and enforce
   them with ZFS datasets and quotas instead
 
+## Curated `rest-server` Flags Reference
+
+This repo passes `rest-server` flags through `REST_SERVER_OPTIONS`. Keep the
+value as one quoted string in `.env`.
+
+### Default Flags In This Repo
+
+| Flag | Default In Repo | What It Does | When To Use It | Caveat |
+| --- | --- | --- | --- | --- |
+| `--path /data/repos` | Yes | Stores repositories under `/data/repos` instead of the image default path. | Keep it for this repo. | Changing it affects storage docs and existing repo paths. |
+| `--append-only` | Yes | Allows new backups but blocks deletion and modification through the REST API. | Use for append-only backup targets. | Clients cannot run `forget` / `prune` through this endpoint. |
+| `--private-repos` | Yes | Restricts each user to repository paths that begin with the username. | Keep it for multi-user isolation. | Removing it changes the access-control model. |
+
+### Optional Flags That Fit This Repo
+
+| Flag | Default In Repo | What It Does | When To Use It | Caveat |
+| --- | --- | --- | --- | --- |
+| `--max-size <bytes>` | No | Sets the maximum size of a repository in bytes. | Use when you want an app-level per-repo limit. | Applies per repository, not per user across multiple subrepositories. |
+| `--prometheus` | No | Exposes Prometheus metrics at `/metrics`. | Use if you run Prometheus scraping for this stack. | Add auth planning before enabling in a shared environment. |
+| `--prometheus-no-auth` | No | Disables auth on `/metrics`. | Use only on a trusted internal monitoring path. | Not a safe default on broadly reachable networks. |
+| `--group-accessible-repos` | No | Makes repositories accessible to the filesystem group. | Use only if you intentionally operate with shared host group access. | Not needed in the current root-owned data-path model. |
+| `--log <file>` | No | Writes HTTP request logs to a file. | Use if container stdout logging is not enough. | File logging needs host-path planning and rotation. |
+| `--debug` | No | Enables debug logging. | Use temporarily while diagnosing issues. | Too noisy for a normal default. |
+
+### Flags That Change The Deployment Model
+
+| Flag | Default In Repo | What It Does | When To Use It | Caveat |
+| --- | --- | --- | --- | --- |
+| `--no-auth` | No | Disables `.htpasswd` authentication. | Rarely appropriate. | Breaks the repo's user-management and private-repo model. |
+| `--proxy-auth-username <header>` | No | Trusts an upstream proxy header as the username. | Use only if you intentionally move auth to a trusted proxy. | Changes the security model and requires proxy hardening. |
+| `--tls` | No | Enables TLS in `rest-server`. | Use only if you intentionally terminate TLS in the container. | This repo defaults to TLS termination in Nginx Proxy Manager. |
+| `--tls-cert <path>` / `--tls-key <path>` | No | Points `rest-server` at certificate and key files. | Use only with in-container TLS. | Requires cert/key lifecycle management in this repo. |
+| `--tls-min-ver 1.2|1.3` | No | Sets the minimum TLS version for in-container TLS. | Use only with in-container TLS. | Not relevant to the default NPM-terminated model. |
+| `--listen <addr>` | No | Changes the listen address inside the container. | Usually leave at the image default `:8000`. | The current Compose stack assumes the container listens on port `8000`. |
+| `--no-verify-upload` | No | Skips upload integrity verification. | Only for very constrained hardware after deliberate review. | Upstream explicitly warns against enabling it casually. |
+
+Upstream reference for the full current flag list:
+<https://github.com/restic/rest-server>
+
 ## What Is Intentionally Not In `.env`
 
 - repository passwords used by restic clients

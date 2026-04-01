@@ -48,6 +48,9 @@ Reference stack:
    - `REST_SERVER_DATA_ROOT`
    - `REST_SERVER_OPTIONS`
 
+   For a curated guide to the supported `rest-server` flags used by this repo,
+   see [`Docs/CONFIGURATION.md`](./Docs/CONFIGURATION.md).
+
 4. Ensure the shared proxy network exists.
 
    If your Nginx Proxy Manager stack is already deployed, this should already

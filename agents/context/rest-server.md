@@ -24,6 +24,8 @@ This repo deploys the official `restic/rest-server` container image.
   probes
 - changing `REST_SERVER_OPTIONS` changes whether clients are append-only backup
   users or full self-maintaining repo users
+- `Docs/CONFIGURATION.md` contains the curated repo-specific flags table for
+  `REST_SERVER_OPTIONS`; do not duplicate the full upstream help text elsewhere
 
 ## Where To Update Docs
 
