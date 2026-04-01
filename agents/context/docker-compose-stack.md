@@ -8,6 +8,7 @@ the repo root.
 - image: `restic/rest-server:${REST_SERVER_IMAGE_TAG}`
 - bind mount: `${REST_SERVER_DATA_ROOT}:/data`
 - shared external proxy network: `npm_proxy`
+- no host port publishing in the default stack
 - auth file path: `${REST_SERVER_PASSWORD_FILE}`
 - extra rest-server flags: `${REST_SERVER_OPTIONS}`
 - default tracked data path: `/tank/docker/data/restic-rest-server`
@@ -27,6 +28,8 @@ the repo root.
 ## Drift Risks
 
 - docs describing defaults that no longer match `env.example`
+- accidental reintroduction of host port publishing without an intentional
+  deployment-model change
 - changing proxy-network assumptions without updating deployment/security docs
 - switching away from bind-mounted persistent storage without updating storage
   guidance

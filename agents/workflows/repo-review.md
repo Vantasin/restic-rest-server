@@ -22,8 +22,8 @@ Run this review after core repository-function changes, including:
 1. Read `agents/context/repo-map.md` and the touched context files.
 2. Read the relevant human docs in `README.md` and `Docs/`.
 3. Inspect changed implementation, templates, and docs together.
-4. Check whether ports, proxy-network assumptions, paths, auth assumptions,
-   update flow, and storage examples still match.
+4. Check whether network exposure, proxy-network assumptions, paths, auth
+   assumptions, update flow, and storage examples still match.
 5. Run the relevant checks from `agents/rules/verification.md`.
 
 ## What To Look For
@@ -34,6 +34,8 @@ Run this review after core repository-function changes, including:
 - security claims that no longer match actual defaults
 - Nginx Proxy Manager host/port/network guidance drifting away from the Compose
   stack or `env.example`
+- accidental reintroduction of host port publishing or other direct-ingress
+  behavior
 - storage-path drift or accidental in-repo persistence
 - ZFS or `tank/docker/{compose,data}` examples drifting away from current
   tracked defaults

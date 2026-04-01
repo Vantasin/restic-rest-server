@@ -16,7 +16,7 @@ operational changes.
 ## Include When Relevant
 
 - image tags
-- published ports
+- network exposure changes such as host port publishing or NPM-only ingress
 - storage paths
 - auth or access-model changes
 - whether the change affected tracked templates only or live runtime state too

@@ -26,3 +26,5 @@ This repo is for server-side Restic REST deployment only.
   integration instead of hard-wiring it into `docker-compose.yml`
 - joining the shared external proxy network is acceptable; vendoring the full
   Nginx Proxy Manager stack into this repo is not
+- do not reintroduce host port publishing for the REST server unless the human
+  docs and deployment model are intentionally changed in the same work

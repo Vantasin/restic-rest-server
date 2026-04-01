@@ -17,6 +17,7 @@
 - shared reverse-proxy network in examples: `npm_proxy`
 - default public HTTPS path: external Nginx Proxy Manager forwarding to
   `restic-rest-server:8000`
+- default stack exposure: no host-published service port
 - these are current tracked defaults, not universal hard requirements
 
 ## Human Docs
