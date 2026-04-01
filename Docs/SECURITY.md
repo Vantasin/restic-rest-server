@@ -20,9 +20,6 @@ This means the safe default deployment shape is:
 - behind a same-host Nginx Proxy Manager reverse proxy that terminates HTTPS
   and forwards to `restic-rest-server:8000` on the shared Docker network
 
-Direct HTTP use on a trusted private network or VPN is still possible, but it
-is no longer the primary documented path in this repo.
-
 Direct unauthenticated exposure is out of scope for this repo.
 
 ## REST Server Vs SSH/SFTP

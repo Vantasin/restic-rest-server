@@ -13,7 +13,7 @@ Update human docs when a change touches:
 - `docker-compose.yml` behavior or deployment flow
 - `env.example` variables, defaults, or examples
 - storage paths or persistence semantics
-- auth defaults, bind addresses, or exposure model
+- auth defaults or exposure model
 - repo verification or Git hook behavior
 
 ## Required Agent Updates

@@ -99,12 +99,6 @@ username segment:
 restic -r "rest:https://backup:<PASSWORD>@backup.example.com/backup/laptop" init
 ```
 
-For direct HTTP on a trusted network only:
-
-```bash
-restic -r "rest:http://backup:<PASSWORD>@backup.example.com:8000/backup/laptop" init
-```
-
 Additional repositories for the same user can be created beneath that prefix,
 for example `/backup/server-a` and `/backup/server-b`.
 

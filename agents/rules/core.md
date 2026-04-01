@@ -10,7 +10,7 @@
 
 - never commit `.env` or populated secrets
 - treat `env.example` as the tracked source of truth for deployment defaults
-- do not silently change auth posture, storage paths, bind addresses, or
+- do not silently change auth posture, network exposure, storage paths, or
   append-only/private-repo defaults without updating docs
 
 ## Change Hygiene

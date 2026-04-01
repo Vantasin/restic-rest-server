@@ -92,9 +92,6 @@ Reference stack:
    restic -r "rest:https://backup:<PASSWORD>@backup.example.com/backup/laptop" init
    ```
 
-   If you are intentionally using plain HTTP on a trusted network, use
-   `rest:http://...` instead.
-
 ## Default Behavior
 
 - Uses the official `restic/rest-server` image pinned through `env.example`
