@@ -10,6 +10,8 @@ volume.
 - repositories live under `/data/repos` by default
 - the default tracked path is `/tank/docker/data/restic-rest-server`
 - the default repo clone location is `/tank/docker/compose/restic-rest-server`
+- the default ownership split is operator-owned Compose repo path and
+  `root:root` service-data path
 
 ## Why This Matters
 

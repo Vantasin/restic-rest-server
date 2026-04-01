@@ -28,12 +28,24 @@ Create the ZFS datasets and clone the repo:
 ```bash
 sudo zfs create -p tank/docker/compose/restic-rest-server
 sudo zfs create -p tank/docker/data/restic-rest-server
-sudo chown -R "$USER":"$USER" /tank/docker/compose/restic-rest-server
-git clone <REPO_URL> /tank/docker/compose/restic-rest-server
+sudo chown "$USER":"$USER" /tank/docker/compose/restic-rest-server
+sudo chmod 755 /tank/docker/compose/restic-rest-server
+sudo chown root:root /tank/docker/data/restic-rest-server
+sudo chmod 700 /tank/docker/data/restic-rest-server
+git clone https://github.com/Vantasin/restic-rest-server.git /tank/docker/compose/restic-rest-server
 cd /tank/docker/compose/restic-rest-server
 ```
 
 If the host uses a different ZFS pool name, replace `tank` in the examples.
+
+Ownership model:
+
+- `/tank/docker/compose/restic-rest-server`: operator-owned because it is the
+  Git working tree and local config area
+- `/tank/docker/data/restic-rest-server`: `root:root` because it is live
+  bind-mounted service state
+
+If you already use GitHub SSH keys, the SSH clone URL is also fine.
 
 Create local runtime config:
 
@@ -61,6 +73,7 @@ The example below uses the default `REST_SERVER_DATA_ROOT`.
 
 ```bash
 sudo mkdir -p /tank/docker/data/restic-rest-server/repos
+sudo chown root:root /tank/docker/data/restic-rest-server
 sudo chmod 700 /tank/docker/data/restic-rest-server
 ```
 

@@ -56,10 +56,25 @@ With the default `--private-repos` option, the first path segment under
 Recommended baseline:
 
 ```bash
+sudo zfs create -p tank/docker/compose/restic-rest-server
 sudo zfs create -p tank/docker/data/restic-rest-server
+sudo chown "$USER":"$USER" /tank/docker/compose/restic-rest-server
+sudo chmod 755 /tank/docker/compose/restic-rest-server
+sudo chown root:root /tank/docker/data/restic-rest-server
 sudo mkdir -p /tank/docker/data/restic-rest-server/repos
 sudo chmod 700 /tank/docker/data/restic-rest-server
 ```
+
+Recommended ownership split:
+
+- Compose repo dataset: operator-owned, for example `$USER:$USER`
+- Data dataset: `root:root`
+
+Why:
+
+- the Compose dataset is a Git working tree and local `.env` editing area
+- the data dataset is bind-mounted live service state and should stay more
+  restrictive by default
 
 The bind-mounted path should live outside the Git repo. Do not store
 repositories inside the clone.

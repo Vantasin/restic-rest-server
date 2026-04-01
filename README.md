@@ -20,10 +20,19 @@ Reference stack:
    ```bash
    sudo zfs create -p tank/docker/compose/restic-rest-server
    sudo zfs create -p tank/docker/data/restic-rest-server
-   sudo chown -R "$USER":"$USER" /tank/docker/compose/restic-rest-server
-   git clone <REPO_URL> /tank/docker/compose/restic-rest-server
+   sudo chown "$USER":"$USER" /tank/docker/compose/restic-rest-server
+   sudo chmod 755 /tank/docker/compose/restic-rest-server
+   sudo chown root:root /tank/docker/data/restic-rest-server
+   sudo chmod 700 /tank/docker/data/restic-rest-server
+   git clone https://github.com/Vantasin/restic-rest-server.git /tank/docker/compose/restic-rest-server
    cd /tank/docker/compose/restic-rest-server
    ```
+
+   Keep the Compose dataset operator-owned because it holds the Git working
+   tree and local `.env`. Keep the data dataset root-owned because it stores
+   live bind-mounted service state.
+
+   If you already use GitHub SSH keys, the SSH clone URL is also fine.
 
 2. Copy the tracked env template to local runtime state.
 
@@ -54,6 +63,7 @@ Reference stack:
 
    ```bash
    sudo mkdir -p /tank/docker/data/restic-rest-server/repos
+   sudo chown root:root /tank/docker/data/restic-rest-server
    sudo chmod 700 /tank/docker/data/restic-rest-server
    ```
 
