@@ -60,23 +60,16 @@ Reference stack:
    docker network inspect npm_proxy >/dev/null 2>&1 || docker network create npm_proxy
    ```
 
-5. Create the host storage path from `.env`.
-
-   The example below uses the default `REST_SERVER_DATA_ROOT`.
-
-   ```bash
-   sudo mkdir -p /tank/docker/data/restic-rest-server/repos
-   sudo chown root:root /tank/docker/data/restic-rest-server
-   sudo chmod 700 /tank/docker/data/restic-rest-server
-   ```
-
-6. Start the stack.
+5. Start the stack.
 
    ```bash
    docker compose up -d
    ```
 
-7. Add the proxy host in Nginx Proxy Manager.
+   With the current bind mount configuration, Docker Compose will create the
+   bind source path if it does not already exist.
+
+6. Add the proxy host in Nginx Proxy Manager.
 
    If you use the matching public Nginx Proxy Manager stack, see:
    <https://github.com/Vantasin/Nginx-Proxy-Manager.git>
@@ -89,13 +82,13 @@ Reference stack:
    - Forward Port: `8000`
    - SSL: your certificate with `Force SSL` enabled
 
-8. Create the first HTTP auth user inside the running container.
+7. Create the first HTTP auth user inside the running container.
 
    ```bash
    docker compose exec rest-server create_user backup
    ```
 
-9. Initialize the first repository from a restic client.
+8. Initialize the first repository from a restic client.
 
    With the default `--private-repos` option, the repository path must start
    with the username. The example assumes HTTPS is terminated by a reverse

@@ -61,9 +61,12 @@ sudo zfs create -p tank/docker/data/restic-rest-server
 sudo chown "$USER":"$USER" /tank/docker/compose/restic-rest-server
 sudo chmod 755 /tank/docker/compose/restic-rest-server
 sudo chown root:root /tank/docker/data/restic-rest-server
-sudo mkdir -p /tank/docker/data/restic-rest-server/repos
 sudo chmod 700 /tank/docker/data/restic-rest-server
 ```
+
+Docker Compose can create the bind source path automatically on first start.
+Create `repos/` yourself only if you want the directory tree present ahead of
+time or you are preparing per-user ZFS datasets beneath it.
 
 Recommended ownership split:
 

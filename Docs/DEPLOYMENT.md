@@ -67,21 +67,14 @@ If your Nginx Proxy Manager stack is already deployed, it should already exist.
 docker network inspect npm_proxy >/dev/null 2>&1 || docker network create npm_proxy
 ```
 
-Create the host storage path:
-
-The example below uses the default `REST_SERVER_DATA_ROOT`.
-
-```bash
-sudo mkdir -p /tank/docker/data/restic-rest-server/repos
-sudo chown root:root /tank/docker/data/restic-rest-server
-sudo chmod 700 /tank/docker/data/restic-rest-server
-```
-
 Start the service:
 
 ```bash
 docker compose up -d
 ```
+
+With the current bind mount configuration, Docker Compose will create the bind
+source path from `REST_SERVER_DATA_ROOT` if it does not already exist.
 
 Configure Nginx Proxy Manager:
 
