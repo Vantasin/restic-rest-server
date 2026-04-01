@@ -18,6 +18,9 @@ This repo deploys the official `restic/rest-server` container image.
 - repository initialization is a client task, not a server bootstrap task
 - transport security is expected to be handled by Nginx Proxy Manager unless
   the operator intentionally chooses a different model
+- host-local access is not part of the default stack; troubleshooting should
+  assume Portainer logs, `docker compose logs`, or temporary in-container
+  probes
 
 ## Where To Update Docs
 

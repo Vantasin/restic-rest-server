@@ -36,8 +36,6 @@ Reference stack:
 
    At minimum, review:
 
-   - `REST_SERVER_BIND_ADDRESS`
-   - `REST_SERVER_PUBLISHED_PORT`
    - `REST_SERVER_DATA_ROOT`
    - `REST_SERVER_OPTIONS`
 
@@ -173,7 +171,7 @@ Use the root README for the first deployment, then follow the detailed docs in
   on the shared `npm_proxy` Docker network.
 - The matching public Nginx Proxy Manager reference repo is:
   <https://github.com/Vantasin/Nginx-Proxy-Manager.git>
-- The default bind address stays `127.0.0.1`; Nginx Proxy Manager should proxy
-  to `restic-rest-server:8000` over Docker networking, not via the host port.
+- The service is not published on a host port by default; Nginx Proxy Manager
+  should proxy to `restic-rest-server:8000` over Docker networking.
 - Exposing the service directly on an untrusted network without TLS is not a
   safe default; see [`Docs/SECURITY.md`](./Docs/SECURITY.md).

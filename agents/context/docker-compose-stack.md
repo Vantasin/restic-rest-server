@@ -7,7 +7,6 @@ the repo root.
 
 - image: `restic/rest-server:${REST_SERVER_IMAGE_TAG}`
 - bind mount: `${REST_SERVER_DATA_ROOT}:/data`
-- published port: `${REST_SERVER_BIND_ADDRESS}:${REST_SERVER_PUBLISHED_PORT}:8000`
 - shared external proxy network: `npm_proxy`
 - auth file path: `${REST_SERVER_PASSWORD_FILE}`
 - extra rest-server flags: `${REST_SERVER_OPTIONS}`
@@ -28,7 +27,6 @@ the repo root.
 ## Drift Risks
 
 - docs describing defaults that no longer match `env.example`
-- changing the bind address or published port without updating security docs
 - changing proxy-network assumptions without updating deployment/security docs
 - switching away from bind-mounted persistent storage without updating storage
   guidance

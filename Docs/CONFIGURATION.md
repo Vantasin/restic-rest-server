@@ -31,22 +31,6 @@ Default:
 REST_SERVER_CONTAINER_NAME=restic-rest-server
 ```
 
-### `REST_SERVER_BIND_ADDRESS`
-
-Host IP for the published port.
-
-Recommended values:
-
-- `127.0.0.1` when using same-host Nginx Proxy Manager for TLS; the proxy
-  should reach the container over the shared `npm_proxy` network
-- `0.0.0.0` only when you intentionally want direct network exposure
-
-### `REST_SERVER_PUBLISHED_PORT`
-
-Host port mapped to container port `8000`. This is mainly for host-local
-checks, troubleshooting, or intentional direct access. It is not the default
-public HTTPS entry point.
-
 ### `REST_SERVER_DATA_ROOT`
 
 Host path bind-mounted to `/data` inside the container. This path persists:
@@ -96,6 +80,7 @@ Keep this value as one quoted string in `.env`.
 
 - repository passwords used by restic clients
 - full Nginx Proxy Manager stack configuration
+- Docker host port publishing choices for the REST server
 - TLS certificate management
 - host firewall rules
 

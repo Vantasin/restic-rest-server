@@ -55,19 +55,16 @@ Useful lightweight checks:
 docker compose ps
 docker compose logs --tail=100 rest-server
 docker network inspect npm_proxy >/dev/null
-curl -I http://127.0.0.1:8000/
 ```
 
 Notes:
 
-- a `401 Unauthorized` response is expected when auth is enabled and the server
-  is reachable
 - `docker network inspect npm_proxy` confirms the shared reverse-proxy network
   exists on the host
-- the `curl` example uses the default bind address and port; adjust it to match
-  your `.env`
 - Nginx Proxy Manager should reach the service at `restic-rest-server:8000`
-  over Docker networking, not through the host loopback address
+  over Docker networking
+- for troubleshooting, prefer `docker compose logs`, Portainer logs, and
+  temporary in-container probes over host-published ports
 
 ## User Management
 
