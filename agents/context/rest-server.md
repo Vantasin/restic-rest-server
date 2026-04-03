@@ -16,6 +16,8 @@ This repo deploys the official `restic/rest-server` container image.
 
 - users must be created with `docker compose exec rest-server create_user ...`
 - repository URLs must begin with the username when `--private-repos` is used
+- human-facing client examples should prefer `RESTIC_REST_USERNAME` /
+  `RESTIC_REST_PASSWORD` over inline `user:pass@` repository URLs
 - repository initialization is a client task, not a server bootstrap task
 - transport security is expected to be handled by Nginx Proxy Manager unless
   the operator intentionally chooses a different model

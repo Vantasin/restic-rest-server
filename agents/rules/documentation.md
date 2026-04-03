@@ -30,3 +30,5 @@ Update `agents/` when a change touches:
 - link to the canonical human doc instead of duplicating it in `agents/`
 - keep agent docs concise and operational
 - prefer one clear owner document per topic
+- do not teach inline secret-bearing command examples when the same workflow
+  can be shown with separate environment variables or prompts

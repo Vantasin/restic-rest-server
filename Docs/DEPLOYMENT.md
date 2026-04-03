@@ -113,7 +113,7 @@ Typical onboarding flow:
    dataset and quota before the first client write:
 
    ```bash
-   sudo zfs create tank/docker/data/restic-rest-server/repos/backup
+   sudo zfs create -p tank/docker/data/restic-rest-server/repos/backup
    sudo zfs set quota=500G tank/docker/data/restic-rest-server/repos/backup
    sudo chown root:root /tank/docker/data/restic-rest-server/repos/backup
    sudo chmod 700 /tank/docker/data/restic-rest-server/repos/backup
@@ -139,10 +139,16 @@ Typical onboarding flow:
    its own restic repository password:
 
    ```bash
-   restic -r "rest:https://backup:<SERVER_PASSWORD>@backup.example.com/backup/laptop" init
+   export RESTIC_REPOSITORY="rest:https://backup.example.com/backup/laptop"
+   export RESTIC_REST_USERNAME="backup"
+   read -rs "RESTIC_REST_PASSWORD?REST server password: "; echo
+   restic init
    ```
 
 5. Client keeps managing its own restic repository password after that.
+
+   Do not embed the server password directly in the repository URL. Keep the
+   repository location and the HTTP auth secret separate.
 
 To change a user's server password, rerun:
 
@@ -165,7 +171,10 @@ With the default `--private-repos` option, repository URLs must begin with the
 username segment:
 
 ```bash
-restic -r "rest:https://backup:<PASSWORD>@backup.example.com/backup/laptop" init
+export RESTIC_REPOSITORY="rest:https://backup.example.com/backup/laptop"
+export RESTIC_REST_USERNAME="backup"
+read -rs "RESTIC_REST_PASSWORD?REST server password: "; echo
+restic init
 ```
 
 Additional repositories for the same user can be created beneath that prefix,

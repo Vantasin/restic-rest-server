@@ -29,6 +29,8 @@ Run this review after core repository-function changes, including:
 ## What To Look For
 
 - secrets or local runtime state being committed
+- sample commands or configuration examples that expose secrets inline when a
+  safer pattern exists
 - Compose values or examples drifting away from `env.example`
 - operator workflow drift between root README and detailed docs
 - security claims that no longer match actual defaults

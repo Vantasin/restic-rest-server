@@ -95,7 +95,10 @@ Reference stack:
    proxy:
 
    ```bash
-   restic -r "rest:https://backup:<PASSWORD>@backup.example.com/backup/laptop" init
+   export RESTIC_REPOSITORY="rest:https://backup.example.com/backup/laptop"
+   export RESTIC_REST_USERNAME="backup"
+   read -rs "RESTIC_REST_PASSWORD?REST server password: "; echo
+   restic init
    ```
 
 ## Client Onboarding
@@ -125,11 +128,18 @@ Typical onboarding flow for one client:
    password:
 
    ```bash
-   restic -r "rest:https://backup:<SERVER_PASSWORD>@backup.example.com/backup/laptop" init
+   export RESTIC_REPOSITORY="rest:https://backup.example.com/backup/laptop"
+   export RESTIC_REST_USERNAME="backup"
+   read -rs "RESTIC_REST_PASSWORD?REST server password: "; echo
+   restic init
    ```
 
 4. Client reuses that repository URL for backup, snapshots, restore, and other
    restic operations.
+
+   Do not embed the server password directly in the repository URL. Prefer
+   `RESTIC_REST_USERNAME` and `RESTIC_REST_PASSWORD` so the repository string
+   can be logged or reused without exposing the HTTP auth secret.
 
 Multiple users are supported. With `--private-repos`, each user is limited to
 paths under its own username prefix, for example:

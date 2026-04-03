@@ -31,6 +31,8 @@ Run this review after core changes to the repo's agent layer:
 - duplicated human-ops guidance inside `agents/`
 - conflicting rules or workflow steps
 - missing review or verification expectations after structure changes
+- agent guidance that would allow secret-bearing sample commands to reappear in
+  human docs
 
 ## Output Expectations
 

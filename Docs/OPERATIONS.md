@@ -112,8 +112,14 @@ a restic client, use a repository URL that matches the configured access model.
 Default pattern with `--private-repos`:
 
 ```bash
-restic -r "rest:https://backup:<PASSWORD>@backup.example.com/backup/laptop" init
+export RESTIC_REPOSITORY="rest:https://backup.example.com/backup/laptop"
+export RESTIC_REST_USERNAME="backup"
+read -rs "RESTIC_REST_PASSWORD?REST server password: "; echo
+restic init
 ```
+
+Keep the repository URL free of inline Basic Auth credentials. `RESTIC_REST_*`
+variables are the safer default for operator examples.
 
 If the server is in append-only mode, clients can back up and restore through
 that endpoint but cannot run `forget` / `prune` there.

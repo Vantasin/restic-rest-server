@@ -109,7 +109,7 @@ access `/alice` and below. That maps cleanly to a ZFS dataset mounted at:
 Example:
 
 ```bash
-sudo zfs create tank/docker/data/restic-rest-server/repos/alice
+sudo zfs create -p tank/docker/data/restic-rest-server/repos/alice
 sudo zfs set quota=500G tank/docker/data/restic-rest-server/repos/alice
 sudo chown root:root /tank/docker/data/restic-rest-server/repos/alice
 sudo chmod 700 /tank/docker/data/restic-rest-server/repos/alice
@@ -120,7 +120,10 @@ Then the client can initialize repositories beneath that username prefix, for
 example:
 
 ```bash
-restic -r "rest:https://alice:<SERVER_PASSWORD>@backup.example.com/alice/laptop" init
+export RESTIC_REPOSITORY="rest:https://backup.example.com/alice/laptop"
+export RESTIC_REST_USERNAME="alice"
+read -rs "RESTIC_REST_PASSWORD?REST server password: "; echo
+restic init
 ```
 
 Guidelines:
