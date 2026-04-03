@@ -17,6 +17,10 @@ Client-side repository creation and usage belong in the dedicated Restic REST
 client repo:
 <https://github.com/Vantasin/restic-rest-client>
 
+This repo's client-facing contract is limited to the base per-user repository
+URL pattern, the username, and the server password. The client repo owns
+repository creation, client-side secret handling, and backup/restore commands.
+
 ## Quick Start
 
 1. Clone the repo onto the Linux host.
@@ -118,6 +122,8 @@ Typical handoff flow for one client:
    - the hostname, for example `backup.example.com`
    - the rest-server username, for example `backup`
    - the rest-server password that was set during `create_user`
+   - the expected per-user repository URL pattern, for example
+     `rest:https://backup.example.com/backup/laptop`
 
 3. Send the client to the Restic REST client repo for repository creation and
    client-side setup:

@@ -20,6 +20,8 @@ This repo deploys the official `restic/rest-server` container image.
   `RESTIC_REST_PASSWORD` over inline `user:pass@` repository URLs
 - repository initialization is a client task, not a server bootstrap task, and
   should point to the external `restic-rest-client` repo
+- the server repo's client-facing contract is limited to the base per-user
+  URL pattern, the username, and the server password
 - transport security is expected to be handled by Nginx Proxy Manager unless
   the operator intentionally chooses a different model
 - host-local access is not part of the default stack; troubleshooting should

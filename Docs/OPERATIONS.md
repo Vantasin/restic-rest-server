@@ -110,6 +110,9 @@ This repo deploys the server and manages server-side users. Client-side
 repository creation belongs in the external Restic REST client repo:
 <https://github.com/Vantasin/restic-rest-client>
 
+The server-side handoff is limited to the base per-user repository URL
+pattern, the username, and the server password.
+
 Expected repository path pattern with `--private-repos`:
 
 - `rest:https://backup.example.com/backup/laptop`
