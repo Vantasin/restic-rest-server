@@ -33,6 +33,8 @@ Run this review after core repository-function changes, including:
   safer pattern exists
 - Compose values or examples drifting away from `env.example`
 - operator workflow drift between root README and detailed docs
+- quick-start or deployment docs drifting past server deployment/user creation
+  into client-side repository setup that should live elsewhere
 - security claims that no longer match actual defaults
 - Nginx Proxy Manager host/port/network guidance drifting away from the Compose
   stack or `env.example`

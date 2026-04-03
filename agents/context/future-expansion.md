@@ -14,5 +14,7 @@ The repo is intentionally prepared for growth, but growth should stay orderly.
 
 - keep the current quick-start path valid at the repo root
 - do not pull client-side automation into this repo
+- keep client-side repo initialization and usage docs in the external
+  `restic-rest-client` repo
 - prefer new human docs in `Docs/` before adding detailed agent notes
 - extend verification only when the new check is fast, local, and deterministic

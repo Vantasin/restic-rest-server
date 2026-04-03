@@ -116,15 +116,15 @@ sudo chmod 700 /tank/docker/data/restic-rest-server/repos/alice
 docker compose exec rest-server create_user alice
 ```
 
-Then the client can initialize repositories beneath that username prefix, for
+Client repositories for that user should live beneath the username prefix, for
 example:
 
-```bash
-export RESTIC_REPOSITORY="rest:https://backup.example.com/alice/laptop"
-export RESTIC_REST_USERNAME="alice"
-read -rs "RESTIC_REST_PASSWORD?REST server password: "; echo
-restic init
-```
+- `rest:https://backup.example.com/alice/laptop`
+- `rest:https://backup.example.com/alice/workstation`
+
+Use the external Restic REST client repo for the actual client-side repository
+creation flow:
+<https://github.com/Vantasin/restic-rest-client>
 
 Guidelines:
 

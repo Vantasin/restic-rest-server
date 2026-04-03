@@ -13,6 +13,10 @@ public HTTPS and SSL termination on a shared external Docker network.
 Reference stack:
 <https://github.com/Vantasin/Nginx-Proxy-Manager.git>
 
+Client-side repository creation and usage belong in the dedicated Restic REST
+client repo:
+<https://github.com/Vantasin/restic-rest-client>
+
 ## Quick Start
 
 1. Clone the repo onto the Linux host.
@@ -88,20 +92,11 @@ Reference stack:
    docker compose exec rest-server create_user backup
    ```
 
-8. Initialize the first repository from a restic client.
+   The server quick start ends here. For client-side repository creation and
+   backup setup, continue in the Restic REST client repo:
+   <https://github.com/Vantasin/restic-rest-client>
 
-   With the default `--private-repos` option, the repository path must start
-   with the username. The example assumes HTTPS is terminated by a reverse
-   proxy:
-
-   ```bash
-   export RESTIC_REPOSITORY="rest:https://backup.example.com/backup/laptop"
-   export RESTIC_REST_USERNAME="backup"
-   read -rs "RESTIC_REST_PASSWORD?REST server password: "; echo
-   restic init
-   ```
-
-## Client Onboarding
+## Client Handoff
 
 The server-side login and the restic repository password are separate.
 
@@ -110,7 +105,7 @@ The server-side login and the restic repository password are separate.
 - Restic repository password:
   client-managed encryption password known to the client
 
-Typical onboarding flow for one client:
+Typical handoff flow for one client:
 
 1. Server admin creates the rest-server user:
 
@@ -124,22 +119,19 @@ Typical onboarding flow for one client:
    - the rest-server username, for example `backup`
    - the rest-server password that was set during `create_user`
 
-3. Client initializes its repository and chooses its own restic repository
-   password:
+3. Send the client to the Restic REST client repo for repository creation and
+   client-side setup:
 
-   ```bash
-   export RESTIC_REPOSITORY="rest:https://backup.example.com/backup/laptop"
-   export RESTIC_REST_USERNAME="backup"
-   read -rs "RESTIC_REST_PASSWORD?REST server password: "; echo
-   restic init
-   ```
+   <https://github.com/Vantasin/restic-rest-client>
 
-4. Client reuses that repository URL for backup, snapshots, restore, and other
-   restic operations.
+4. The expected repository path shape stays under the username prefix, for
+   example:
 
-   Do not embed the server password directly in the repository URL. Prefer
-   `RESTIC_REST_USERNAME` and `RESTIC_REST_PASSWORD` so the repository string
-   can be logged or reused without exposing the HTTP auth secret.
+   - `rest:https://backup.example.com/backup/laptop`
+   - `rest:https://backup.example.com/backup/server-a`
+
+   The client repo should handle the actual `restic init`, backup, and restore
+   commands.
 
 Multiple users are supported. With `--private-repos`, each user is limited to
 paths under its own username prefix, for example:

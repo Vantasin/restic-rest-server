@@ -9,6 +9,8 @@ This repo is for server-side Restic REST deployment only.
 - keep the base stack focused on Docker Compose deployment of the REST server
 - keep `Docs/` human-only and `agents/` agent-only
 - keep persistent backup data outside the repo clone
+- keep client-side repository creation and backup workflows out of this repo;
+  they belong in the external `restic-rest-client` repo
 
 ## Allowed Growth
 

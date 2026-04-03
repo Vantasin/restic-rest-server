@@ -21,6 +21,10 @@ This repo is designed for the simplest server workflow:
 Reference stack for the default reverse-proxy model:
 <https://github.com/Vantasin/Nginx-Proxy-Manager.git>
 
+Client-side repository creation and usage belong in the dedicated Restic REST
+client repo:
+<https://github.com/Vantasin/restic-rest-client>
+
 ## First Deployment
 
 Create the ZFS datasets and clone the repo:
@@ -93,7 +97,11 @@ Create the first HTTP auth user:
 docker compose exec rest-server create_user backup
 ```
 
-## User And Client Onboarding
+The server deployment workflow stops here. For client-side repository creation
+and backup setup, continue in the Restic REST client repo:
+<https://github.com/Vantasin/restic-rest-client>
+
+## User Creation And Client Handoff
 
 The server auth layer and the restic repository password are different
 credentials.
@@ -107,7 +115,7 @@ Client-managed credential:
 
 - restic repository password used to encrypt repository contents
 
-Typical onboarding flow:
+Typical handoff flow:
 
 1. Optional but recommended for multi-user servers: create a per-user ZFS
    dataset and quota before the first client write:
@@ -135,20 +143,16 @@ Typical onboarding flow:
    - the rest-server username
    - the rest-server password that was set during `create_user`
 
-4. Client initializes a repository under its own username prefix and chooses
-   its own restic repository password:
+4. Send the client to the Restic REST client repo for repository creation and
+   client-side setup:
 
-   ```bash
-   export RESTIC_REPOSITORY="rest:https://backup.example.com/backup/laptop"
-   export RESTIC_REST_USERNAME="backup"
-   read -rs "RESTIC_REST_PASSWORD?REST server password: "; echo
-   restic init
-   ```
+   <https://github.com/Vantasin/restic-rest-client>
 
-5. Client keeps managing its own restic repository password after that.
+5. The expected repository path shape stays under the username prefix, for
+   example `rest:https://backup.example.com/backup/laptop`.
 
-   Do not embed the server password directly in the repository URL. Keep the
-   repository location and the HTTP auth secret separate.
+   The client repo should handle the actual `restic init`, backup, restore,
+   and secret-management steps.
 
 To change a user's server password, rerun:
 
@@ -162,23 +166,17 @@ To delete a server user:
 docker compose exec rest-server delete_user backup
 ```
 
-## Repository Initialization Expectations
+## Repository Path Expectations
 
-This repo deploys the server. Repository initialization still happens from a
-restic client.
+This repo deploys the server and user accounts. Client-side repository
+creation belongs in the external Restic REST client repo.
 
 With the default `--private-repos` option, repository URLs must begin with the
-username segment:
+username segment. Examples:
 
-```bash
-export RESTIC_REPOSITORY="rest:https://backup.example.com/backup/laptop"
-export RESTIC_REST_USERNAME="backup"
-read -rs "RESTIC_REST_PASSWORD?REST server password: "; echo
-restic init
-```
-
-Additional repositories for the same user can be created beneath that prefix,
-for example `/backup/server-a` and `/backup/server-b`.
+- `rest:https://backup.example.com/backup/laptop`
+- `rest:https://backup.example.com/backup/server-a`
+- `rest:https://backup.example.com/backup/server-b`
 
 If you use per-user ZFS datasets, create the dataset before the first client
 initializes the repository path so the repo lands in the dataset mountpoint

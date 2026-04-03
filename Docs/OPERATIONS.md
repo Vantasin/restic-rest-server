@@ -94,7 +94,7 @@ docker compose exec rest-server create_user backup
 These commands update the `.htpasswd` file inside the bind-mounted data path.
 
 If you use per-user ZFS datasets and quotas, create the dataset before running
-the client's first `restic init` so the repository lands in the dataset
+the client's first write so the repository lands in the dataset
 mountpoint instead of a plain directory.
 
 Credential model:
@@ -104,22 +104,19 @@ Credential model:
 - restic repository password:
   client-managed encryption password
 
-## Backup Repository Initialization
+## Client Handoff
 
-The server deployment does not initialize client repositories on its own. From
-a restic client, use a repository URL that matches the configured access model.
+This repo deploys the server and manages server-side users. Client-side
+repository creation belongs in the external Restic REST client repo:
+<https://github.com/Vantasin/restic-rest-client>
 
-Default pattern with `--private-repos`:
+Expected repository path pattern with `--private-repos`:
 
-```bash
-export RESTIC_REPOSITORY="rest:https://backup.example.com/backup/laptop"
-export RESTIC_REST_USERNAME="backup"
-read -rs "RESTIC_REST_PASSWORD?REST server password: "; echo
-restic init
-```
+- `rest:https://backup.example.com/backup/laptop`
+- `rest:https://backup.example.com/backup/server-a`
 
-Keep the repository URL free of inline Basic Auth credentials. `RESTIC_REST_*`
-variables are the safer default for operator examples.
+Keep the repository URL free of inline Basic Auth credentials if you show
+examples elsewhere. `RESTIC_REST_*` variables are the safer default.
 
 If the server is in append-only mode, clients can back up and restore through
 that endpoint but cannot run `forget` / `prune` there.

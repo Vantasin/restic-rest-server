@@ -18,7 +18,8 @@ This repo deploys the official `restic/rest-server` container image.
 - repository URLs must begin with the username when `--private-repos` is used
 - human-facing client examples should prefer `RESTIC_REST_USERNAME` /
   `RESTIC_REST_PASSWORD` over inline `user:pass@` repository URLs
-- repository initialization is a client task, not a server bootstrap task
+- repository initialization is a client task, not a server bootstrap task, and
+  should point to the external `restic-rest-client` repo
 - transport security is expected to be handled by Nginx Proxy Manager unless
   the operator intentionally chooses a different model
 - host-local access is not part of the default stack; troubleshooting should
